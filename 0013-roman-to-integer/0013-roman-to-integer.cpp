@@ -1,23 +1,35 @@
+int sym(char c){
+    switch(c){
+        case 'I':
+            return 1;
+        case 'V':
+            return 5;
+        case 'X':
+            return 10;
+        case 'L':
+            return 50;
+        case 'C':
+            return 100;
+        case 'D':
+            return 500;
+        case 'M':
+            return 1000;
+    }
+    return 0;
+}
 class Solution {
 public:
     int romanToInt(string s) {
-        unordered_map<char,int> sym;
         int sum=0;
-        sym['M']=1000;
-        sym['D']=500;
-        sym['C']=100;
-        sym['L']=50;
-        sym['X']=10;
-        sym['V']=5;
-        sym['I']=1;
         int prev=0;
         for(int i=s.length()-1;i>=0;i--){
-            if(sym[s[i]]>=prev){
-                sum=sum+sym[s[i]];
+            int val=sym(s[i]);
+            if(val>=prev){
+                sum=sum+val;
             }else{
-                sum=sum-sym[s[i]];
+                sum=sum-val;
             }
-            prev=sym[s[i]];
+            prev=val;
         }
         return sum;
     }
