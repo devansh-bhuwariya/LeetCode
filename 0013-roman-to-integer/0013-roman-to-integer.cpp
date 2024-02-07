@@ -23,13 +23,13 @@ public:
         int sum=0;
         int prev=0;
         for(int i=s.length()-1;i>=0;i--){
-            int val=sym(s[i]);
-            if(val>=prev){
-                sum=sum+val;
+            // int val=sym(s[i]);
+            if(sym(s[i])>=prev){
+                sum=sum+sym(s[i]);
             }else{
-                sum=sum-val;
+                sum=sum-sym(s[i]);
             }
-            prev=val;
+            prev=sym(s[i]);
         }
         return sum;
     }
