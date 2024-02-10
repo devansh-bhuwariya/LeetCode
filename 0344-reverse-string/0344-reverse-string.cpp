@@ -6,6 +6,8 @@ public:
         while(i<j){
             if(s[i]==s[j]){
                 continue;
+                i++;
+                j--;
             }
             swap(s[i],s[j]);
             i++;
