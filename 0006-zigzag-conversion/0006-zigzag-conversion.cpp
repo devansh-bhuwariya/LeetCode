@@ -1,28 +1,24 @@
 class Solution {
 public:
     string convert(string s, int numRows) {
-        if(numRows<=1 || s.length()<numRows){
+        if(s.length()<numRows || numRows<=1){
             return s;
         }
-        vector<vector<char>> a(numRows, vector<char>(s.length(), ' '));
-        int r=0;
-        int direction=1;
         string temp="";
+        vector<string> rows(min(numRows,int(s.length())));
+        int direction=1;
+        int curr_row=0;
         for(int i=0;i<s.length();i++){
-            a[r][i]=s[i];
-            if(r==0){
+            rows[curr_row]=rows[curr_row]+s[i];
+            if(curr_row==0){
                 direction=1;
-            }else if( r==numRows-1){
+            }else if(curr_row==numRows-1){
                 direction=-1;
             }
-            r=r+direction;
+            curr_row+=direction;
         }
-        for(int i=0;i<numRows;i++){
-            for(int j=0;j<s.length();j++){
-                if(a[i][j]!=' '){
-                    temp=temp+a[i][j];
-                }
-            }
+        for(int i=0;i<min(numRows,int(s.length()));i++){
+            temp=temp+rows[i];
         }
         return temp;
     }
