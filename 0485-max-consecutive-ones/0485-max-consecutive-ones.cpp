@@ -7,11 +7,11 @@ public:
             if(nums[i]==1){
                 count+=1;
             }else{
-                maxi=max(count,maxi);
                 count=0;
             }
+             maxi=max(count,maxi);
         }
-        maxi=max(count,maxi);
+       
         return maxi;
     }
 };
