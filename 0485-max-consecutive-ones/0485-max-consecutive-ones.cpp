@@ -9,7 +9,7 @@ public:
             }else{
                 count=0;
             }
-             maxi=max(count,maxi);
+            maxi=max(count,maxi);
         }
        
         return maxi;
