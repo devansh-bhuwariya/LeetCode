@@ -9,9 +9,15 @@ public:
             return;
         }
         if(candidates[ind]<=target){
-            sub.push_back(candidates[ind]);
-            recur(ind,target-candidates[ind],candidates,sub,result);
-            sub.pop_back();
+            if(ind==0){
+                sub.push_back(candidates[ind]);
+                recur(ind,target-candidates[ind],candidates,sub,result);
+                sub.pop_back();
+            }else if(candidates[ind]!=candidates[ind-1]){
+                sub.push_back(candidates[ind]);
+                recur(ind,target-candidates[ind],candidates,sub,result);
+                sub.pop_back();
+            }
         }
         recur(ind+1,target,candidates,sub,result);
     }
