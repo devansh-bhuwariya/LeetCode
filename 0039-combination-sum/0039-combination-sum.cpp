@@ -8,16 +8,10 @@ public:
         if(ind==candidates.size()){
             return;
         }
-        if(candidates[ind]<=target){
-            if(ind==0){
-                sub.push_back(candidates[ind]);
-                recur(ind,target-candidates[ind],candidates,sub,result);
-                sub.pop_back();
-            }else if(candidates[ind]!=candidates[ind-1]){
-                sub.push_back(candidates[ind]);
-                recur(ind,target-candidates[ind],candidates,sub,result);
-                sub.pop_back();
-            }
+        if(candidates[ind]<=target and (ind==0 or candidates[ind]!=candidates[ind-1])){
+            sub.push_back(candidates[ind]);
+            recur(ind,target-candidates[ind],candidates,sub,result);
+            sub.pop_back();
         }
         recur(ind+1,target,candidates,sub,result);
     }
