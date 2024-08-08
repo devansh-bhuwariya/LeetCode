@@ -5,25 +5,22 @@ public:
             result.push_back(sub);
             return;
         }
-        if(ind==candidates.size()){
-            return;
-        }
-        if(candidates[ind]<=target){
-            sub.push_back(candidates[ind]);
-            recur(ind+1,candidates,target-candidates[ind],result,sub);
+        for(int i=ind;i<candidates.size();i++){
+            if(i>ind and candidates[i]==candidates[i-1]){
+                continue;
+            }else if(candidates[i]>target){
+                break;
+            }
+            sub.push_back(candidates[i]);
+            recur(i+1,candidates,target-candidates[i],result,sub);
             sub.pop_back();
         }
-        int i=ind;
-        while(i+1<candidates.size() and candidates[i+1]==candidates[ind]){
-            i++;
-        }
-        recur(i+1,candidates,target,result,sub);
     }
     
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(),candidates.end());
         vector<vector<int>>result;
         vector<int>sub;
+        sort(candidates.begin(),candidates.end());
         recur(0,candidates,target,result,sub);
         return result;
     }
