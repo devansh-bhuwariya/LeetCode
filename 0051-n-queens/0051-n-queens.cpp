@@ -46,6 +46,7 @@ public:
             board[i]=s;
         }
         recur(0,n,board,ans);
+        cout<<ans.size()<<endl;
         return ans;
     }
 };
