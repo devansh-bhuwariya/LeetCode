@@ -1,8 +1,8 @@
 class Solution {
 public:
-    long long count=0;
-    void merge(vector<int>& nums,int low,int mid,int high){
+    int merge(vector<int>& nums,int low,int mid,int high){
         int right=mid+1;
+        int count=0;
         for(int left=low;left<=mid;left++){
             while(right<=high and nums[left]>2LL*nums[right]){
                 right++;
@@ -33,19 +33,22 @@ public:
             nums[i]=temp[j];
             j++;
         }
+        return count;
     }
     
-    void mergeSort(vector<int>& nums,int low,int high){
+    int mergeSort(vector<int>& nums,int low,int high){
+        int count=0;
         if(low<high){
             int mid=(low+high)/2;
-            mergeSort(nums,low,mid);
-            mergeSort(nums,mid+1,high);
-            merge(nums,low,mid,high);
+            count+=mergeSort(nums,low,mid);
+            count+=mergeSort(nums,mid+1,high);
+            count+=merge(nums,low,mid,high);
         }
+        return count;
     }
     
     int reversePairs(vector<int>& nums) {
-        mergeSort(nums,0,nums.size()-1);
-        return count;
+        return mergeSort(nums,0,nums.size()-1);
+        
     }
 };
