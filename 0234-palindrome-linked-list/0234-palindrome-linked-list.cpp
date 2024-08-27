@@ -10,43 +10,49 @@
  */
 class Solution {
 public:
-    ListNode* reverse(ListNode*head){
-        if(head==nullptr or head->next==nullptr){
-            return head;
-        }
+    ListNode* rev(ListNode* head){
+        ListNode* temp=head;
         ListNode* prev=nullptr;
-        ListNode* curr=head;
-        while(curr->next!=nullptr){
-            ListNode* front=curr->next;
-            curr->next=prev;
-            prev=curr;
-            curr=front;
+        while(temp!=nullptr){
+            ListNode* nxt=temp->next;
+            temp->next=prev;
+            prev=temp;
+            temp=nxt;
         }
-        curr->next=prev;
-        return curr;
+        return prev;
     }
+    
     bool isPalindrome(ListNode* head) {
-        if(head==nullptr or head->next==nullptr){
-            return true;
-        }
+        bool ans=true;
+        if(head->next==nullptr) return true;
         ListNode* slow=head;
         ListNode* fast=head;
         while(fast->next!=nullptr and fast->next->next!=nullptr){
-            slow=slow->next;
             fast=fast->next->next;
+            slow=slow->next;
         }
-        ListNode* newHead=reverse(slow->next);
-        ListNode* first=head;
-        ListNode* second=newHead;
-        while(second!=nullptr){
-            if(first->val!=second->val){
-                reverse(newHead);
-                return false;
+        
+        slow->next=rev(slow->next);
+        slow=slow->next;
+        ListNode* d=head;
+        while(slow!=nullptr){
+            if(d->val==slow->val){
+                d=d->next;
+                slow=slow->next;
+            }else{
+                ans=false;
+                break;
             }
-            first=first->next;
-            second=second->next;
         }
-        reverse(newHead);
-        return true;
+        slow=head;
+        fast=head;
+        while(fast->next!=nullptr and fast->next->next!=nullptr){
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        
+        slow->next=rev(slow->next);
+        
+        return ans;
     }
 };
