@@ -8,31 +8,51 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+// class Solution {
+// public:
+//     ListNode* rotateRight(ListNode* head, int k) {
+//         if(head==nullptr or head->next==nullptr or k==0) return head;
+//         ListNode* fast=head;
+//         int count=0;
+//         while(fast!=nullptr){
+//             count++;
+//             fast=fast->next;
+//         }
+//         k=k%count;
+//         fast=head;
+//         for(int i=1;i<=k;i++){    
+//             fast=fast->next;
+//         }
+//         ListNode* slow=head;
+//         while(fast->next!=nullptr){
+//             slow=slow->next;
+//             fast=fast->next;
+//         }
+//         ListNode* res=slow->next;
+//         slow->next=nullptr;
+//         fast->next=head;
+//         return res;
+//     }
+// };
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        if(head==nullptr or head->next==nullptr){
-            return head;
-        }
-        ListNode* temp=new ListNode();
-        temp->next=head;
-        ListNode* dummy=temp;
-        int count=0;
+        if(head==nullptr or head->next==nullptr or k==0) return head;
+        ListNode* temp=head;
+        int len=1;
         while(temp->next!=nullptr){
-            count+=1;
+            len++;
             temp=temp->next;
         }
         temp->next=head;
-        if(k>=count){
-            k=k%count;
+        temp=temp->next;
+        k=k%len;  //3%5=2
+        k=len-k;  //5-2=3
+        for(int i=1;i<k;i++){
+            temp=temp->next;
         }
-        k=count-k;
-        while(k!=0){
-            dummy=dummy->next;
-            k-=1;
-        }
-        head=dummy->next;
-        dummy->next=nullptr;
+        head=temp->next;
+        temp->next=nullptr;
         return head;
     }
 };
