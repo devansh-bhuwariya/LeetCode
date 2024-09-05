@@ -21,6 +21,16 @@ public:
         tail->prev=head;
     }
     
+    ~LRUCache(){
+        while(head->next!=tail){
+            Node* temp=head;
+            head=head->next;
+            delete temp;
+        }
+        delete head;
+        delete tail;
+    }
+    
     void deleteNode(Node* temp){
         temp->prev->next=temp->next;
         temp->next->prev=temp->prev;
