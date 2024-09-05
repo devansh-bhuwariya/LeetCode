@@ -1,51 +1,103 @@
-class LFUCache {
+class Node{
 public:
-    unordered_map<int,list<pair<int,int>>> freq;
-    unordered_map<int,pair<int,list<pair<int,int>>::iterator>>cache;
-    int cap;
-    int min_freq;
+    int key;
+    int val;
+    int freq;
+    Node* next;
+    Node* prev;
+    Node(int key,int val){
+        this->key=key;
+        this->val=val;
+        freq=1;
+    }
+};
+
+class List{
+public:
+    Node* head=new Node(-1,-1);
+    Node* tail=new Node(-1,-1);
+    int size;
+    List(){
+        head->next=tail;
+        tail->prev=head;
+        size=0;
+    }
+    
+    void deleteNode(Node* temp){
+        temp->prev->next=temp->next;
+        temp->next->prev=temp->prev;
+        size--;
+    }
+    
+    void addNode(Node* temp){
+        temp->next=head->next;
+        temp->prev=head;
+        head->next->prev=temp;
+        head->next=temp;
+        size++;
+    }
+};
+
+
+class LFUCache : public List {
+private:
+    unordered_map<int,Node*> mp;
+    unordered_map<int,List*> freq_mp;
+    int size;
+    int leastFreq;
+public:
     LFUCache(int capacity) {
-        cap=capacity;
-        min_freq=0;
+        size=capacity;
+        leastFreq=0;
     }
-    void insert(int key,int frequency,int value){
-        freq[frequency].push_back({key,value});
-        cache[key]={frequency,--freq[frequency].end()};
-    }
-    int get(int key) {
-        const auto it=cache.find(key);
-        if(it==cache.end()) return -1;
-        int f= it->second.first;
-        auto iter=it->second.second;
-        const pair<int,int> kv=*iter;
-        freq[f].erase(iter);
-        if(freq[f].empty()){
-            freq.erase(f);
-            if(min_freq==f){
-                min_freq++;
-            }
+    
+    void update_freq_mp(Node* temp){
+        int freq=temp->freq;
+        temp->freq=freq+1;
+        freq_mp[freq]->deleteNode(temp);
+        if(freq==leastFreq and freq_mp[freq]->size==0){
+            leastFreq++;
         }
-        insert(key,f+1,kv.second);
-        return kv.second;
+        List* list=new List();
+        if(freq_mp.find(freq+1)!=freq_mp.end()){
+            list=freq_mp[freq+1];
+        }
+        list->addNode(temp);
+        freq_mp[freq+1]=list;
+    }
+    
+    int get(int key) {
+        if(mp.find(key)!=mp.end()){
+            Node* temp=mp[key];
+            update_freq_mp(temp);
+            return temp->val;
+        }
+        return -1;
     }
     
     void put(int key, int value) {
-        if(cap<=0) return;
-        auto it=cache.find(key);
-        if(it!=cache.end()){
-            it->second.second->second=value;
-            get(key);
-            return ;
-        }
-        if(cap==cache.size()){
-            cache.erase(freq[min_freq].front().first);
-            freq[min_freq].pop_front();
-            if(freq[min_freq].empty()){
-                freq.erase(min_freq);
+        if(mp.find(key)!=mp.end()){
+            Node* temp=mp[key];
+            temp->val=value;
+            update_freq_mp(temp);
+        }else{
+            if(mp.size()==size){
+                List* list=freq_mp[leastFreq];
+                Node* del=list->tail->prev;
+                mp.erase(del->key);
+                (*list).deleteNode(del);
+                delete del;
             }
+            leastFreq=1;
+            List* list=new List();
+            if(freq_mp.find(leastFreq)!=freq_mp.end()){
+                list=freq_mp[leastFreq];
+            }
+            Node *temp=new Node(key,value);
+            list->addNode(temp);
+            mp[key]=temp;
+            freq_mp[leastFreq]=list;
         }
-        min_freq=1;
-        insert(key,1,value);
     }
 };
 
