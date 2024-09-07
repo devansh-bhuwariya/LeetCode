@@ -25,7 +25,7 @@ public:
                 int newRow=r+d_row[i];
                 int newCol=c+d_col[i];
                 if(newRow>=0 and newRow<n and newCol>=0 and newCol<m){
-                    if(grid[newRow][newCol]==1 and vis.find({newRow,newCol})==vis.end()){
+                    if(grid[newRow][newCol]==1){
                         time=t+1;
                         grid[newRow][newCol]=2;
                         q.push({{newRow,newCol},t+1});
